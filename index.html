@@ -7,6 +7,51 @@
     </head>
 
     <body>
+        <table id="results">
+            <caption>
+                AsmCrypto.js vs. Rust WASM
+                <br>
+                <small>10 iterations each</small>
+            </caption>
+            <thead>
+                <tr>
+                    <th>Hash</th>
+                    <th>Input</th>
+                    <th>AsmCrypto Output</th>
+                    <th>WASM Output</th>
+                    <th>
+                        AsmCrypto
+                        <br> Min Seconds
+                    </th>
+                    <th>
+                        WASM
+                        <br> Min Seconds
+                    </th>
+                    <th>
+                        AsmCrypto
+                        <br> Max Seconds
+                    </th>
+                    <th>
+                        WASM
+                        <br> Max Seconds
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <template id="result-template">
+                    <tr>
+                        <td class="hash-name"></td>
+                        <td class="input"></td>
+                        <td class="result hash asmcrypto-hash"></td>
+                        <td class="result hash wasm-hash"></td>
+                        <td class="result seconds min-seconds asmcrypto-min-seconds"></td>
+                        <td class="result seconds min-seconds wasm-min-seconds"></td>
+                        <td class="result seconds max-seconds asmcrypto-max-seconds"></td>
+                        <td class="result seconds max-seconds wasm-max-seconds"></td>
+                    </tr>
+                </template>
+            </tbody>
+        </table>
 
         <script src="index.js"></script>
     </body>

@@ -1,0 +1,40 @@
+body {
+    font-family: sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th {
+    vertical-align: bottom;
+}
+
+td {
+    vertical-align: top;
+    padding: 2px 4px;
+}
+
+tr:nth-child(2n) {
+    background-color: #ccc;
+}
+
+.error {
+    outline: solid #c33 1px;
+    background-color: #c66 !important;
+    text-decoration: line-through;
+}
+
+.winner {
+    background-color: #6c6;
+}
+
+.result {
+    font-family: monospace;
+    max-width: 8em;
+    overflow: hidden;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

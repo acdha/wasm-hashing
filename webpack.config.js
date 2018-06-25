@@ -1,3 +1,5 @@
+/* global module, require, __dirname */
+
 const path = require("path");
 
 module.exports = {
@@ -6,5 +8,15 @@ module.exports = {
         path: path.resolve(__dirname, "dist"),
         filename: "index.js"
     },
-    mode: "production"
+    devtool: "source-map",
+    // mode: "development",
+    mode: "production",
+    module: {
+        rules: [
+            {
+                test: /\.css$/,
+                use: ["style-loader", "css-loader"]
+            }
+        ]
+    }
 };
