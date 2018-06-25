@@ -21,6 +21,26 @@ let resultTemplate = document.getElementById("result-template");
 
 let hashers = new Map();
 
+function highlightResults(nodeList) {
+    // We'll skip anything without a value since some libraries won't have a result for an unsupported algorithm
+    let resultElements = Array.from(nodeList).filter(i => isFinite(i.value));
+
+    resultElements.sort((a, b) => {
+        return a.value - b.value;
+    });
+
+    let minValue = resultElements[0].value;
+    let maxValue = resultElements[resultElements.length - 1].value;
+
+    resultElements.forEach(i => {
+        if (i.value == minValue) {
+            i.classList.add("winner");
+        } else if (i.value == maxValue && maxValue > minValue) {
+            i.classList.add("loser");
+        }
+    });
+}
+
 function runNextBenchmark() {
     let [hashName, implementations] = hashers.entries().next().value;
     hashers.delete(hashName);
@@ -97,26 +117,19 @@ function runBenchmark(hashName, implementations) {
         }
 
         let hashResults = new Set(
-            Array.from(entry.querySelectorAll(".hash.result")).map(
-                i => i.textContent
+            Array.from(entry.querySelectorAll(".hash.result")).map(i =>
+                i.textContent.toString().trim()
             )
         );
+
+        hashResults.delete(""); // We'll ignore empty results since not all algorithms are supported by every library
 
         if (hashResults.size > 1) {
             entry.classList.add("error");
         }
 
-        let minTimes = Array.from(entry.querySelectorAll(".min-seconds"));
-        minTimes.sort((a, b) => {
-            return a.value - b.value;
-        });
-        minTimes[0].classList.add("winner");
-
-        let maxTimes = Array.from(entry.querySelectorAll(".max-seconds"));
-        maxTimes.sort((a, b) => {
-            return a.value - b.value;
-        });
-        maxTimes[0].classList.add("winner");
+        highlightResults(entry.querySelectorAll(".min-seconds"));
+        highlightResults(entry.querySelectorAll(".max-seconds"));
     });
 }
 

@@ -30,6 +30,10 @@ tr:nth-child(2n) {
     background-color: #6c6;
 }
 
+.loser {
+    background-color: #c66;
+}
+
 .result {
     font-family: monospace;
     max-width: 8em;
