@@ -10,7 +10,7 @@ use wasm_bindgen::prelude::*;
 
 use sha1::Sha1;
 use sha2::{Sha256, Sha512};
-use sha3::Sha3_256;
+use sha3::{Sha3_256, Sha3_512};
 
 #[wasm_bindgen]
 pub fn sha1(input_bytes: &[u8]) -> String {
@@ -47,6 +47,16 @@ pub fn sha3_256(input_bytes: &[u8]) -> String {
     use sha3::Digest;
 
     let mut hasher = Sha3_256::default();
+    hasher.input(input_bytes);
+    let output = hasher.result();
+    return format!("{:x}", output);
+}
+
+#[wasm_bindgen]
+pub fn sha3_512(input_bytes: &[u8]) -> String {
+    use sha3::Digest;
+
+    let mut hasher = Sha3_512::default();
     hasher.input(input_bytes);
     let output = hasher.result();
     return format!("{:x}", output);

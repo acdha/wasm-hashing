@@ -20,10 +20,13 @@ tr:nth-child(2n) {
     background-color: #ccc;
 }
 
-.error {
-    outline: solid #c33 1px;
+td.error {
     background-color: #c66 !important;
     text-decoration: line-through;
+}
+
+.error {
+    outline: solid #c33 1px;
 }
 
 .winner {
