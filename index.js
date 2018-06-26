@@ -110,12 +110,14 @@ function setupBenchmarks(hashers) {
             for (let [libName, testHasher] of implementations) {
                 libResults.set(libName, []);
 
-                benchmarkQueue.push([
-                    libName,
-                    hashName,
-                    testHasher,
-                    testVectorIndex
-                ]);
+                for (let i = 0; i < 10; i++) {
+                    benchmarkQueue.push([
+                        libName,
+                        hashName,
+                        testHasher,
+                        testVectorIndex
+                    ]);
+                }
             }
         }
     }
@@ -127,6 +129,14 @@ function runNextBenchmark() {
 
     if (benchmarkQueue.length > 0) {
         window.requestAnimationFrame(runNextBenchmark);
+    }
+}
+
+function* chunkIterator(inputBytes, chunkSize = 65536) {
+    let chunkCount = inputBytes.byteLength / chunkSize;
+
+    for (var i = 0, j = 0; i < chunkCount; i++, j += chunkSize) {
+        yield inputBytes.slice(j, j + chunkSize);
     }
 }
 
@@ -147,7 +157,11 @@ function runBenchmark(libName, hashName, digestFunction, testVectorIndex) {
     let startMilliseconds = performance.now();
 
     try {
-        result = digestFunction(encodedBytes);
+        if (digestFunction.cannotIterate) {
+            result = digestFunction(encodedBytes);
+        } else {
+            result = digestFunction(chunkIterator(encodedBytes));
+        }
     } catch (err) {
         let msg = `Unhandled exception in ${libName} ${hashName}: ${err}`;
         alert(msg);
@@ -246,69 +260,96 @@ function highlightResults(nodeList) {
 
 wasm_hashing
     .then(hashing => {
-        let asmSha1 = inputBytes => {
+        let asmSha1 = byteSliceIterator => {
             const hasher = new Sha1();
-            hasher.process(inputBytes);
+            for (let chunk of byteSliceIterator) {
+                hasher.process(chunk);
+            }
             return bytes_to_hex(hasher.finish().result);
         };
 
-        let asmSha2_256 = inputBytes => {
+        let asmSha2_256 = byteSliceIterator => {
             const hasher = new Sha256();
-            hasher.process(inputBytes);
+            for (let chunk of byteSliceIterator) {
+                hasher.process(chunk);
+            }
             return bytes_to_hex(hasher.finish().result);
         };
 
-        let asmSha2_512 = inputBytes => {
+        let asmSha2_512 = byteSliceIterator => {
             const hasher = new Sha512();
-            hasher.process(inputBytes);
+            for (let chunk of byteSliceIterator) {
+                hasher.process(chunk);
+            }
             return bytes_to_hex(hasher.finish().result);
         };
 
-        let jsSha1 = inputBytes => {
+        let jsSha1 = byteSliceIterator => {
             let hasher = new jsSHA("SHA-1", "ARRAYBUFFER");
-            hasher.update(inputBytes.buffer);
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk.buffer);
+            }
             return hasher.getHash("HEX");
         };
 
-        let jsSha2_256 = inputBytes => {
+        let jsSha2_256 = byteSliceIterator => {
             let hasher = new jsSHA("SHA-256", "ARRAYBUFFER");
-            hasher.update(inputBytes.buffer);
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk.buffer);
+            }
             return hasher.getHash("HEX");
         };
 
-        let jsSha2_512 = inputBytes => {
+        let jsSha2_512 = byteSliceIterator => {
             let hasher = new jsSHA("SHA-512", "ARRAYBUFFER");
-            hasher.update(inputBytes.buffer);
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk.buffer);
+            }
             return hasher.getHash("HEX");
         };
 
-        let jsSha3_256 = inputBytes => {
+        let jsSha3_256 = byteSliceIterator => {
             let hasher = new jsSHA("SHA3-256", "ARRAYBUFFER");
-            hasher.update(inputBytes.buffer);
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk.buffer);
+            }
             return hasher.getHash("HEX");
         };
 
-        let jsSha3_512 = inputBytes => {
+        let jsSha3_512 = byteSliceIterator => {
             let hasher = new jsSHA("SHA3-512", "ARRAYBUFFER");
-            hasher.update(inputBytes.buffer);
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk.buffer);
+            }
             return hasher.getHash("HEX");
         };
 
+        // Until there's a clean way to bridge iterators or callbacks between Rust we'll just hope
+        // that the JS runtime is smart enough not to copy huge inputs but this clearly won't be
+        // viable as a long-term solution:
         let wasmSha1 = inputBytes => {
-            return hashing.sha1(inputBytes);
+            return hashing.hash_sha1(inputBytes);
         };
         let wasmSha2_256 = inputBytes => {
-            return hashing.sha2_256(inputBytes);
+            return hashing.hash_sha2_256(inputBytes);
         };
         let wasmSha2_512 = inputBytes => {
-            return hashing.sha2_512(inputBytes);
+            return hashing.hash_sha2_512(inputBytes);
         };
         let wasmSha3_256 = inputBytes => {
-            return hashing.sha3_256(inputBytes);
+            return hashing.hash_sha3_256(inputBytes);
         };
         let wasmSha3_512 = inputBytes => {
-            return hashing.sha3_512(inputBytes);
+            return hashing.hash_sha3_512(inputBytes);
         };
+
+        [
+            wasmSha1,
+            wasmSha2_256,
+            wasmSha2_512,
+            wasmSha3_256,
+            wasmSha3_512
+        ].forEach(i => (i.cannotIterate = true));
 
         let hashers = new Map();
 
@@ -320,6 +361,7 @@ wasm_hashing
                 ["wasm", wasmSha1]
             ])
         );
+
         hashers.set(
             "SHA-2 256",
             new Map([
@@ -328,6 +370,7 @@ wasm_hashing
                 ["wasm", wasmSha2_256]
             ])
         );
+
         hashers.set(
             "SHA-2 512",
             new Map([
