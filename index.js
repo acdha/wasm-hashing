@@ -324,32 +324,43 @@ wasm_hashing
             return hasher.getHash("HEX");
         };
 
-        // Until there's a clean way to bridge iterators or callbacks between Rust we'll just hope
-        // that the JS runtime is smart enough not to copy huge inputs but this clearly won't be
-        // viable as a long-term solution:
-        let wasmSha1 = inputBytes => {
-            return hashing.hash_sha1(inputBytes);
-        };
-        let wasmSha2_256 = inputBytes => {
-            return hashing.hash_sha2_256(inputBytes);
-        };
-        let wasmSha2_512 = inputBytes => {
-            return hashing.hash_sha2_512(inputBytes);
-        };
-        let wasmSha3_256 = inputBytes => {
-            return hashing.hash_sha3_256(inputBytes);
-        };
-        let wasmSha3_512 = inputBytes => {
-            return hashing.hash_sha3_512(inputBytes);
+        let wasmSha1 = byteSliceIterator => {
+            let hasher = new hashing.Sha1Hasher();
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk);
+            }
+            return hasher.hex_digest();
         };
 
-        [
-            wasmSha1,
-            wasmSha2_256,
-            wasmSha2_512,
-            wasmSha3_256,
-            wasmSha3_512
-        ].forEach(i => (i.cannotIterate = true));
+        let wasmSha2_256 = byteSliceIterator => {
+            let hasher = new hashing.Sha2_256Hasher();
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk);
+            }
+            return hasher.hex_digest();
+        };
+        let wasmSha2_512 = byteSliceIterator => {
+            let hasher = new hashing.Sha2_512Hasher();
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk);
+            }
+            return hasher.hex_digest();
+        };
+
+        let wasmSha3_256 = byteSliceIterator => {
+            let hasher = new hashing.Sha3_256Hasher();
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk);
+            }
+            return hasher.hex_digest();
+        };
+        let wasmSha3_512 = byteSliceIterator => {
+            let hasher = new hashing.Sha3_512Hasher();
+            for (let chunk of byteSliceIterator) {
+                hasher.update(chunk);
+            }
+            return hasher.hex_digest();
+        };
 
         let hashers = new Map();
 

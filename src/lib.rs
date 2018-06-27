@@ -8,6 +8,7 @@ extern crate sha3;
 
 extern crate wasm_bindgen;
 
+use std::cell::Cell;
 use wasm_bindgen::prelude::*;
 
 use digest::Digest;
@@ -45,4 +46,134 @@ pub fn hash_sha3_256(input_bytes: &[u8]) -> String {
 #[wasm_bindgen]
 pub fn hash_sha3_512(input_bytes: &[u8]) -> String {
     return hash_bytes::<Sha3_512>(input_bytes);
+}
+
+#[wasm_bindgen]
+pub struct Sha1Hasher {
+    hasher: Cell<Sha1>,
+}
+
+#[wasm_bindgen]
+pub struct Sha2_256Hasher {
+    hasher: Cell<Sha256>,
+}
+
+#[wasm_bindgen]
+pub struct Sha2_512Hasher {
+    hasher: Cell<Sha512>,
+}
+
+#[wasm_bindgen]
+pub struct Sha3_256Hasher {
+    hasher: Cell<Sha3_256>,
+}
+
+#[wasm_bindgen]
+pub struct Sha3_512Hasher {
+    hasher: Cell<Sha3_512>,
+}
+
+#[wasm_bindgen]
+impl Sha1Hasher {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Sha1Hasher {
+        Sha1Hasher {
+            hasher: Cell::new(Sha1::default()),
+        }
+    }
+
+    pub fn update(&mut self, input_bytes: &[u8]) {
+        let hasher = self.hasher.get_mut();
+        hasher.input(input_bytes)
+    }
+
+    pub fn hex_digest(&mut self) -> String {
+        let hasher = self.hasher.take();
+        let output = hasher.result();
+        return format!("{:x}", output);
+    }
+}
+
+#[wasm_bindgen]
+impl Sha2_256Hasher {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Sha2_256Hasher {
+        Sha2_256Hasher {
+            hasher: Cell::new(Sha256::default()),
+        }
+    }
+
+    pub fn update(&mut self, input_bytes: &[u8]) {
+        let hasher = self.hasher.get_mut();
+        hasher.input(input_bytes)
+    }
+
+    pub fn hex_digest(&mut self) -> String {
+        let hasher = self.hasher.take();
+        let output = hasher.result();
+        return format!("{:x}", output);
+    }
+}
+
+#[wasm_bindgen]
+impl Sha2_512Hasher {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Sha2_512Hasher {
+        Sha2_512Hasher {
+            hasher: Cell::new(Sha512::default()),
+        }
+    }
+
+    pub fn update(&mut self, input_bytes: &[u8]) {
+        let hasher = self.hasher.get_mut();
+        hasher.input(input_bytes)
+    }
+
+    pub fn hex_digest(&mut self) -> String {
+        let hasher = self.hasher.take();
+        let output = hasher.result();
+        return format!("{:x}", output);
+    }
+}
+
+#[wasm_bindgen]
+impl Sha3_256Hasher {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Sha3_256Hasher {
+        Sha3_256Hasher {
+            hasher: Cell::new(Sha3_256::default()),
+        }
+    }
+
+    pub fn update(&mut self, input_bytes: &[u8]) {
+        let hasher = self.hasher.get_mut();
+        hasher.input(input_bytes)
+    }
+
+    pub fn hex_digest(&mut self) -> String {
+        let hasher = self.hasher.take();
+        let output = hasher.result();
+        return format!("{:x}", output);
+    }
+}
+
+#[wasm_bindgen]
+impl Sha3_512Hasher {
+    #[wasm_bindgen(constructor)]
+    pub fn new() -> Sha3_512Hasher {
+        Sha3_512Hasher {
+            hasher: Cell::new(Sha3_512::default()),
+        }
+    }
+
+    pub fn update(&mut self, input_bytes: &[u8]) {
+        let hasher = self.hasher.get_mut();
+        hasher.input(input_bytes)
+    }
+
+    pub fn hex_digest(&mut self) -> String {
+        let hasher = self.hasher.take();
+        let output = hasher.result();
+        return format!("{:x}", output);
+    }
 }
