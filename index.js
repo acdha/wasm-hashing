@@ -200,20 +200,24 @@ function updateResultDisplay() {
             );
 
             for (let [libName, times] of allLibraryResults) {
-                let minTimeRow = testRow.querySelector(
-                    `.${libName}-min-seconds`
-                );
+                let minTime = Math.min(...times);
+                let maxTime = Math.max(...times);
 
-                let minTime = (minTimeRow.value = Math.min(...times));
+                if (isFinite(minTime)) {
+                    let minTimeRow = testRow.querySelector(
+                        `.${libName}-min-seconds`
+                    );
+                    minTimeRow.value = minTime;
+                    minTimeRow.textContent = (minTime / 1000).toFixed(4);
+                }
 
-                minTimeRow.textContent = (minTime / 1000).toFixed(4);
-
-                let maxTimeRow = testRow.querySelector(
-                    `.${libName}-max-seconds`
-                );
-                let maxTime = (maxTimeRow.value = Math.max(...times));
-
-                maxTimeRow.textContent = (maxTime / 1000).toFixed(4);
+                if (isFinite(maxTime)) {
+                    let maxTimeRow = testRow.querySelector(
+                        `.${libName}-max-seconds`
+                    );
+                    maxTimeRow.value = maxTime;
+                    maxTimeRow.textContent = (maxTime / 1000).toFixed(4);
+                }
 
                 let hashCell = testRow.querySelector(`.${libName}-hash`);
                 hashCell.classList.toggle("incomplete", times.length < 10);
@@ -257,11 +261,11 @@ function highlightResults(nodeList) {
     let maxValue = resultElements[resultElements.length - 1].value;
 
     resultElements.forEach(i => {
-        if (i.value == minValue) {
-            i.classList.add("winner");
-        } else if (i.value == maxValue && maxValue > minValue) {
-            i.classList.add("loser");
-        }
+        i.classList.toggle("winner", i.value === minValue);
+        i.classList.toggle(
+            "loser",
+            i.value === maxValue && maxValue > minValue
+        );
     });
 }
 
