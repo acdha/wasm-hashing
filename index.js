@@ -140,7 +140,12 @@ function* chunkIterator(inputBytes, chunkSize = 65536) {
     }
 }
 
-function runBenchmark(libName, hashName, digestFunction, testVectorIndex) {
+async function runBenchmark(
+    libName,
+    hashName,
+    digestFunction,
+    testVectorIndex
+) {
     /*
         Hashers is a Map mapping digest names to libName:digestFunction values
         values which will be run 10 times each for each test input.
@@ -158,9 +163,9 @@ function runBenchmark(libName, hashName, digestFunction, testVectorIndex) {
 
     try {
         if (digestFunction.cannotIterate) {
-            result = digestFunction(encodedBytes);
+            result = await digestFunction(encodedBytes);
         } else {
-            result = digestFunction(chunkIterator(encodedBytes));
+            result = await digestFunction(chunkIterator(encodedBytes));
         }
     } catch (err) {
         let msg = `Unhandled exception in ${libName} ${hashName}: ${err}`;
@@ -269,6 +274,30 @@ function highlightResults(nodeList) {
     });
 }
 
+function hexFromArrayBuffer(arrayBuffer) {
+    return Array.from(new Uint8Array(arrayBuffer))
+        .map(b => ("00" + b.toString(16)).slice(-2))
+        .join("");
+}
+
+async function subtleSha1(inputBytes) {
+    const hashBuffer = await crypto.subtle.digest("SHA-1", inputBytes);
+    return hexFromArrayBuffer(hashBuffer);
+}
+subtleSha1.cannotIterate = true;
+
+async function subtleSha2_256(inputBytes) {
+    const hashBuffer = await crypto.subtle.digest("SHA-256", inputBytes);
+    return hexFromArrayBuffer(hashBuffer);
+}
+subtleSha2_256.cannotIterate = true;
+
+async function subtleSha2_512(inputBytes) {
+    const hashBuffer = await crypto.subtle.digest("SHA-512", inputBytes);
+    return hexFromArrayBuffer(hashBuffer);
+}
+subtleSha2_512.cannotIterate = true;
+
 let hashers = new Map();
 
 hashers.set(
@@ -294,6 +323,7 @@ hashers.set(
                 return hasher.getHash("HEX");
             },
         ],
+        ["subtle", subtleSha1],
     ])
 );
 
@@ -320,6 +350,7 @@ hashers.set(
                 return hasher.getHash("HEX");
             },
         ],
+        ["subtle", subtleSha2_256],
     ])
 );
 
@@ -346,6 +377,7 @@ hashers.set(
                 return hasher.getHash("HEX");
             },
         ],
+        ["subtle", subtleSha2_512],
     ])
 );
 
