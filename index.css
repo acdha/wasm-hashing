@@ -45,3 +45,12 @@ td.error {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+.result.incomplete {
+    background: linear-gradient(
+            to right,
+            rgba(248, 248, 248, 1) 0%,
+            rgb(192, 192, 248) 100%
+        )
+        no-repeat;
+}

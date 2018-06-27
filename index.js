@@ -214,6 +214,13 @@ function updateResultDisplay() {
                 let maxTime = (maxTimeRow.value = Math.max(...times));
 
                 maxTimeRow.textContent = (maxTime / 1000).toFixed(4);
+
+                let hashCell = testRow.querySelector(`.${libName}-hash`);
+                hashCell.classList.toggle("incomplete", times.length < 10);
+                if (times.length < 10) {
+                    let pctComplete = (100 * (times.length / 10)).toFixed(0);
+                    hashCell.style.backgroundSize = `${pctComplete}% 100%`;
+                }
             }
 
             let hashResults = new Set(
