@@ -15,7 +15,7 @@ const testVectors = [
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ".repeat(10000),
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ".repeat(100000),
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ".repeat(1000000),
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".repeat(10000000)
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ".repeat(10000000),
 ];
 
 const expectedResults = {
@@ -28,7 +28,7 @@ const expectedResults = {
         "451954ad9b09d854b96a2b65794b6329b5a04c77",
         "0bd3bee4732d984e430c51023e340443b6b516aa",
         "bad81161ca04adc5f20f13163bd88d405b689716",
-        "84804fe33c33792b26acb06b95f5ef7beed0ffe6"
+        "84804fe33c33792b26acb06b95f5ef7beed0ffe6",
     ],
     "SHA-2 256": [
         "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
@@ -39,7 +39,7 @@ const expectedResults = {
         "d81cd8dc1f97d7e7ef61f2acbbbd58c04ec6a1bbe5eff019f85e14395ad74d9f",
         "8b729df74a03932e63a29e8827a9cc06534e67f26cd69011c11a9780e5286805",
         "99932b5a76528365197749ea001419395e62e5968135af95ad9e88209f005cef",
-        "539befd0460ec9d5be79209d891c6ef065b23e8a07159c0e487fb3c78c19e16f"
+        "539befd0460ec9d5be79209d891c6ef065b23e8a07159c0e487fb3c78c19e16f",
     ],
     "SHA-2 512": [
         "cf83e1357eefb8bdf1542850d66d8007d620e4050b5715dc83f4a921d36ce9ce47d0d13c5d85f2b0ff8318d2877eec2f63b931bd47417a81a538327af927da3e",
@@ -50,7 +50,7 @@ const expectedResults = {
         "0a37a16ae154e67bc0abd74a199fc6e3ba851dcef99e5a14a9be3f3ff66d02ac70a464a6077a42a7273233c94c5230ed696039e48086ff0d30a44a11c86fc62c",
         "5da882de5d398be06be158da60f7a5d7e26b2ba1ebe3741267d5110c31dbd7703115d419e3c52b390c7be9aa760de5469a3f3f279503d94a3a5c8f2bbb6b28d5",
         "0c37d97a52a0f04d6be535d12d28b777733ce0077f8aacc40598077bab9e7f1f2c3b8535163119d2b46156bf1fc1678a93babac2eeeec1cb746fdda4b55e807e",
-        "b96406d7eb9c230fe533b9ba2e43e6c8b8bd6fde1f011066ad4499678b9fb4c75f599b7c9b82100c50543e0aa0a8e1ad215408bdfce9a22f463cb097060a367c"
+        "b96406d7eb9c230fe533b9ba2e43e6c8b8bd6fde1f011066ad4499678b9fb4c75f599b7c9b82100c50543e0aa0a8e1ad215408bdfce9a22f463cb097060a367c",
     ],
     "SHA-3 256": [
         "a7ffc6f8bf1ed76651c14756a061d662f580ff4de43b49fa82d80a4b80f8434a",
@@ -61,7 +61,7 @@ const expectedResults = {
         "9afc908627dab591620b2fc45650376bd17b2ad818749ffc79a9f5d03b2862b7",
         "d2cb3acc757538f1f0d38e56ce713c8ee64af88604e5c62ff179e8e7619e5a90",
         "e26694d1b3e9c7c0378b96df9a7623e466f378dabab4d2699e37759d36c10cc5",
-        "f68c5a7233460b5509c542422e8ddd8bd2ac02f912e73aa55187a63bf4648457"
+        "f68c5a7233460b5509c542422e8ddd8bd2ac02f912e73aa55187a63bf4648457",
     ],
     "SHA-3 512": [
         "a69f73cca23a9ac5c8b567dc185a756e97c982164fe25859e0d1dcc1475c80a615b2123af1f5f94c11e3e9402c3ac558f500199d95b6d3e301758586281dcd26",
@@ -72,8 +72,8 @@ const expectedResults = {
         "32d374181709d34bb486e37658d1812b6da17e76876d58b786b12e81b534c2e89cb9a3c705aeb848cab06394f7ec18a3412b34ed46b049f5e6df6ed9e08fe8fa",
         "69a9b6a65efe0c5a301391b1d672f7ced2973a9d590952f99a2615d0004640b5f4c557b0c7b561d93da5f600daea3e28cf03c6d2a7984369552d1382412ee186",
         "af1e630f6e408b58c6d6a27d323e1819534608e04c4e2f9b50ccec6b5530bc41f0d779e52660f15070cb2fb80ebfa7547059d955b74dc38090aad8d664e8e5a4",
-        "32b6c2ae4912766d037e04c23090a3e24bd9c021aa38dda97ec85666a4ca5265029c3f5df5d0b7f86bb0afeaa1d82ccd9f82bcc32bc74b35586e7c95f374fbf8"
-    ]
+        "32b6c2ae4912766d037e04c23090a3e24bd9c021aa38dda97ec85666a4ca5265029c3f5df5d0b7f86bb0afeaa1d82ccd9f82bcc32bc74b35586e7c95f374fbf8",
+    ],
 };
 
 let resultsTable = document.getElementById("results");
@@ -115,7 +115,7 @@ function setupBenchmarks(hashers) {
                         libName,
                         hashName,
                         testHasher,
-                        testVectorIndex
+                        testVectorIndex,
                     ]);
                 }
             }
