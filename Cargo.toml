@@ -8,8 +8,8 @@ crate-type = ["cdylib"]
 
 [dependencies]
 hex = "0.3.2"
-digest = "0.7.4"
+digest = "0.7.5"
 sha-1 = "0.7.0"
 sha2 = "0.7.1"
 sha3 = "0.7.3"
-wasm-bindgen = "0.2.11"
+wasm-bindgen = "0.2.15"
