@@ -86,6 +86,10 @@ let benchmarkQueue = [];
 let results = new Map();
 
 function setupBenchmarks(hashers) {
+    let enableSlowHashers = confirm(
+        "Run very slow algorithms for completeness?"
+    );
+
     for (let [hashName, implementations] of hashers) {
         let testResults = new Map();
         results.set(hashName, testResults);
@@ -112,6 +116,10 @@ function setupBenchmarks(hashers) {
             for (let [libName, testHasher] of implementations) {
                 libResults.set(libName, []);
 
+                if (!enableSlowHashers && libName == "jssha") {
+                    continue;
+                }
+
                 for (let i = 0; i < 10; i++) {
                     benchmarkQueue.push([
                         libName,
@@ -130,7 +138,7 @@ function runNextBenchmark() {
     updateResultDisplay();
 
     if (benchmarkQueue.length > 0) {
-        window.requestAnimationFrame(runNextBenchmark);
+        window.requestIdleCallback(runNextBenchmark);
     }
 }
 
@@ -458,6 +466,6 @@ wasm_hashing
         });
 
         setupBenchmarks(hashers);
-        window.requestAnimationFrame(runNextBenchmark);
+        window.requestIdleCallback(runNextBenchmark);
     })
     .catch(err => alert(`Unhandled error: ${err}`));
