@@ -3,6 +3,8 @@ import "./index.css";
 import { Sha1, Sha256, Sha512, bytes_to_hex } from "asmcrypto.js";
 import jsSHA from "jssha";
 import filesize from "filesize";
+
+// This must be an async import until https://github.com/webpack/webpack/issues/6615 is resolved
 let wasm_hashing = import("./wasm_hashing");
 
 // TODO: add a file-based test using the file reader object in chunks to avoid data marshalling overhead
