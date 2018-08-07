@@ -3,10 +3,10 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./index.js",
+    entry: "./benchmark.js",
     output: {
-        path: path.resolve(__dirname, "dist"),
-        filename: "index.js"
+        path: path.resolve(__dirname, "dist/benchmark/"),
+        filename: "benchmark.js",
     },
     devtool: "source-map",
     // mode: "development",
@@ -15,8 +15,8 @@ module.exports = {
         rules: [
             {
                 test: /\.css$/,
-                use: ["style-loader", "css-loader"]
-            }
-        ]
-    }
+                use: ["style-loader", "css-loader"],
+            },
+        ],
+    },
 };
