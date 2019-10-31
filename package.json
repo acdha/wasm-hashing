@@ -6,7 +6,7 @@
     "scripts": {},
     "dependencies": {
         "asmcrypto.js": "^2.2.0",
-        "filesize": "^3.6.1"
+        "filesize": "^6.0.0"
     },
     "devDependencies": {
         "babel-eslint": "^8.2.5",
