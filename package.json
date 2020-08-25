@@ -14,7 +14,7 @@
         "eslint": "^7.1.0",
         "eslint-plugin-prettier": "^2.6.1",
         "jssha": "^2.3.1",
-        "prettier": "^1.13.5",
+        "prettier": "^2.1.0",
         "style-loader": "^1.0.0",
         "stylelint": "^9.3.0",
         "stylelint-config-prettier": "^3.3.0",
