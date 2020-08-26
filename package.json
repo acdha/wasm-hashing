@@ -17,7 +17,7 @@
         "prettier": "^2.1.1",
         "style-loader": "^1.0.0",
         "stylelint": "^9.3.0",
-        "stylelint-config-prettier": "^3.3.0",
+        "stylelint-config-prettier": "^7.0.0",
         "stylelint-config-recommended": "^2.1.0",
         "webpack": "^4.8.3",
         "webpack-cli": "^3.0.8",
